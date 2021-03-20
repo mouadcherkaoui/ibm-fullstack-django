@@ -127,7 +127,10 @@ class Question(models.Model):
     #    else:
     #        return False
 
-
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    content = models.CharField()
+    is_correct = models.BooleanField()
 #  <HINT> Create a Choice Model with:
     # Used to persist choice content for a question
     # One-To-Many (or Many-To-Many if you want to reuse choices) relationship with Question
@@ -141,6 +144,6 @@ class Question(models.Model):
 # One submission could have multiple choices
 # One choice could belong to multiple submissions
 #class Submission(models.Model):
-#    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
-#    chocies = models.ManyToManyField(Choice)
+   enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+   chocies = models.ManyToManyField(Choice)
 #    Other fields and methods you would like to design
