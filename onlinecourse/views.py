@@ -8,6 +8,9 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import login, logout, authenticate
 import logging
+
+from .models import Course, Choice, Enrollment, Submission
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 # Create your views here.
@@ -69,6 +72,20 @@ def check_if_enrolled(user, course):
             is_enrolled = True
     return is_enrolled
 
+def submit(request, course_id):
+    context = {}
+    if request.method == "POST":
+        user = request.POST['username']
+        if user is not None:
+            result = Enrollment.objects.get(user=user,course=course_id)
+            Submission.objects.create(enrollement=result, course=course_id)
+            choices = request.POST["choices"]
+            return redirect('onlinecourse:index')
+        else:
+            context['message'] = "Invalid username or password."
+            return render(request, 'onlinecourse/user_login_bootstrap.html', context)
+    else:
+        return render(request, 'onlinecourse/user_login_bootstrap.html', context)
 
 # CourseListView
 class CourseListView(generic.ListView):
